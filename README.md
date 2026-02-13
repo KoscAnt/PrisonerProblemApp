@@ -34,7 +34,6 @@ The web version includes:
 - statistical mode (10,000 runs)
 - interactive box opening
 - live logs and summaries
-- responsive UI
 
 ## AI Assistance Disclosure
 
