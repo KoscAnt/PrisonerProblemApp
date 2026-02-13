@@ -8,8 +8,8 @@ This project is based on the classic **100 Prisoners Problem** probability puzzl
 
 The project has two parts:
 
-• C++ simulation — core algorithm and statistical simulation logic  
-• Interactive web application — visual and interactive simulator
+• C++ simulation, core algorithm and statistical simulation logic  ( link: https://github.com/KoscAnt/100-prisoners-problem-simulator )
+• Interactive web application, visual and interactive simulator
 
 ## What I built myself
 
