@@ -42,15 +42,6 @@ AI tools (Codex-style assistance) were used to help translate and adapt the C++ 
 
 All core logic decisions, algorithm understanding, testing, and structure were done by me.
 
-## Tech Stack
-
-C++  
-JavaScript  
-HTML / CSS  
-Simulation logic  
-Algorithmic problem solving  
-Interactive UI design
-
 ## Goal of the Project
 
 To demonstrate:
@@ -58,5 +49,5 @@ To demonstrate:
 - algorithmic thinking
 - simulation modeling
 - probability strategy implementation
-- translating logic across languages (C++ → JS)
+- translating logic across languages 
 - building interactive educational tools
