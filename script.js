@@ -5,9 +5,13 @@ const startCustomBtn = document.getElementById("startCustomBtn");
 const runSimulationBtn = document.getElementById("runSimulationBtn");
 const runStatsBtn = document.getElementById("runStatsBtn");
 const simRuns = document.getElementById("simRuns");
+const navToggle = document.getElementById("navToggle");
+const primaryNav = document.getElementById("primaryNav");
+const topbar = document.querySelector(".topbar");
 
 const statusText = document.getElementById("statusText");
 const turnText = document.getElementById("turnText");
+const currentPrisonerText = document.getElementById("currentPrisonerText");
 const outputLog = document.getElementById("outputLog");
 const summaryText = document.getElementById("summaryText");
 const matrix = document.getElementById("matrix");
@@ -21,8 +25,28 @@ const customState = {
   finished: false,
   prisoner: 1,
   attemptsUsed: 0,
-  limit: 50
+  limit: 50,
+  suggestedBox: null
 };
+
+function setMobileMenu(open) {
+  if (!topbar || !navToggle) return;
+  topbar.classList.toggle("menu-open", open);
+  navToggle.setAttribute("aria-expanded", String(open));
+}
+
+function updateCurrentPrisonerText() {
+  if (!currentPrisonerText) return;
+  if (!customState.active) {
+    currentPrisonerText.textContent = "Current prisoner: -";
+    return;
+  }
+  if (customState.finished) {
+    currentPrisonerText.textContent = `Current prisoner: ${customState.prisoner}/${n} (finished)`;
+    return;
+  }
+  currentPrisonerText.textContent = `Current prisoner: ${customState.prisoner}/${n}`;
+}
 
 function randomPermutation(size) {
   const arr = Array.from({ length: size }, (_, i) => i + 1);
@@ -54,6 +78,7 @@ function resetSummary(msg = "No summary yet.") {
 }
 
 function updateTurnText() {
+  updateCurrentPrisonerText();
   if (!customState.active || customState.finished) {
     turnText.textContent = "";
     return;
@@ -77,6 +102,14 @@ function renderMatrix() {
       cell.classList.add("opened");
     } else {
       cell.classList.add("closed");
+    }
+    if (
+      customState.active &&
+      !customState.finished &&
+      customState.suggestedBox === box &&
+      !isOpened
+    ) {
+      cell.classList.add("suggested");
     }
 
     const boxLabel = document.createElement("div");
@@ -104,6 +137,7 @@ function generateNewMatrix() {
   customState.prisoner = 1;
   customState.attemptsUsed = 0;
   customState.limit = Math.floor(n / 2);
+  customState.suggestedBox = null;
   statusText.textContent = "New matrix generated.";
   updateTurnText();
   resetOutput();
@@ -154,6 +188,7 @@ function onBoxClick(box) {
     appendOutput(`Prisoner ${customState.prisoner} found their number.`);
     if (customState.prisoner === n) {
       customState.finished = true;
+      customState.suggestedBox = null;
       statusText.textContent = "Custom simulation success: all prisoners found their number.";
       turnText.textContent = "";
       appendOutput("All prisoners succeeded.");
@@ -168,7 +203,9 @@ function onBoxClick(box) {
 
     customState.prisoner += 1;
     customState.attemptsUsed = 0;
-    openedInView = new Set();
+    customState.suggestedBox = customState.prisoner;
+    closeAllBoxes();
+    appendOutput(`Moving to prisoner ${customState.prisoner}. All boxes are closed again.`);
     setSummary(
       `Mode: Custom\n` +
       `N = ${n}\n` +
@@ -177,12 +214,12 @@ function onBoxClick(box) {
       `Result: in progress`
     );
     updateTurnText();
-    renderMatrix();
     return;
   }
 
   if (customState.attemptsUsed >= customState.limit) {
     customState.finished = true;
+    customState.suggestedBox = null;
     statusText.textContent = `Custom simulation failed: prisoner ${customState.prisoner} did not find their number.`;
     turnText.textContent = "";
     appendOutput("All prisoners failed.");
@@ -195,6 +232,8 @@ function onBoxClick(box) {
     return;
   }
 
+  customState.suggestedBox = found;
+  renderMatrix();
   updateTurnText();
 }
 
@@ -256,6 +295,7 @@ function runSimulationMode() {
 
   customState.active = false;
   customState.finished = false;
+  customState.suggestedBox = null;
   updateTurnText();
 
   n = Number(sizeSelect.value);
@@ -302,6 +342,7 @@ function runSimulationMode() {
 function runStatsMode() {
   customState.active = false;
   customState.finished = false;
+  customState.suggestedBox = null;
   updateTurnText();
 
   n = Number(sizeSelect.value);
@@ -344,6 +385,7 @@ function startCustomMode() {
   customState.prisoner = 1;
   customState.attemptsUsed = 0;
   customState.limit = Math.floor(n / 2);
+  customState.suggestedBox = customState.prisoner;
 
   statusText.textContent = "Custom Simulation Mode started. Click boxes for the current prisoner.";
   resetOutput(
@@ -369,5 +411,22 @@ startCustomBtn.addEventListener("click", startCustomMode);
 runSimulationBtn.addEventListener("click", runSimulationMode);
 runStatsBtn.addEventListener("click", runStatsMode);
 sizeSelect.addEventListener("change", generateNewMatrix);
+
+if (navToggle && primaryNav && topbar) {
+  navToggle.addEventListener("click", () => {
+    const isOpen = topbar.classList.contains("menu-open");
+    setMobileMenu(!isOpen);
+  });
+
+  primaryNav.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => setMobileMenu(false));
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 920) {
+      setMobileMenu(false);
+    }
+  });
+}
 
 generateNewMatrix();
