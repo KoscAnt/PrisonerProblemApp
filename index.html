@@ -23,7 +23,19 @@
           <p class="brand-subtitle">strategy simulator</p>
         </div>
       </div>
-      <nav class="topnav" aria-label="Primary">
+      <button
+        id="navToggle"
+        class="nav-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="primaryNav"
+        aria-label="Toggle navigation"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav id="primaryNav" class="topnav" aria-label="Primary">
         <a href="#overview">Overview</a>
         <a href="#simulator">Simulator</a>
         <a href="#results">Results</a>
@@ -110,6 +122,7 @@
             <div class="control-block">
               <h3>1) Custom Simulation Mode</h3>
               <p>Manual play. Click boxes for the current prisoner.</p>
+              <p id="currentPrisonerText" class="current-prisoner">Current prisoner: -</p>
               <button id="startCustomBtn">Start Custom Simulation</button>
             </div>
 
