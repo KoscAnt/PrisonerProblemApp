@@ -152,6 +152,29 @@ button {
   margin-right: 200px;
 }
 
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
+  padding: 0;
+  border: 1px solid var(--line-soft);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: none;
+}
+
+.nav-toggle span {
+  width: 18px;
+  height: 2px;
+  border-radius: 2px;
+  background: #111111;
+}
+
 .topnav a {
   text-decoration: none;
   color: #000000;
@@ -496,6 +519,9 @@ button {
   max-width: 100%;
   height: 100%;
   margin: 0 auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 #results h2 {
@@ -581,6 +607,15 @@ button {
   line-height: 1.35;
 }
 
+.current-prisoner {
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  padding: 0.5rem 0.6rem;
+  background: #ffffff;
+  font-weight: 700;
+  color: #10203b;
+}
+
 .setup-section label {
   font-size: 0.84rem;
   display: block;
@@ -661,6 +696,7 @@ button:active {
 .matrix {
   display: grid;
   gap: 0.35rem;
+  width: 100%;
 }
 
 .cell {
@@ -710,6 +746,11 @@ button:active {
   color: var(--opened);
 }
 
+.cell.suggested {
+  border-color: #d81f26;
+  box-shadow: 0 0 0 2px rgba(216, 31, 38, 0.24), 0 8px 16px rgba(10, 24, 52, 0.16);
+}
+
 pre {
   margin: 0;
   max-height: 260px;
@@ -724,16 +765,39 @@ pre {
 @media (max-width: 920px) {
   .topbar {
     padding: 0.7rem 20px;
-    flex-direction: column;
-    align-items: flex-start;
+    flex-wrap: wrap;
+    align-items: center;
   }
 
   .brand {
     margin-left: 0;
   }
 
+  .nav-toggle {
+    display: inline-flex;
+  }
+
   .topnav {
+    display: none;
+    width: 100%;
+    margin-top: 0.45rem;
     margin-right: 0;
+    gap: 0.45rem;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .topbar.menu-open .topnav {
+    display: flex;
+    background: #ffffff;
+    border: 1px solid var(--line-soft);
+    border-radius: 10px;
+    padding: 0.5rem;
+  }
+
+  .topnav a {
+    text-align: center;
+    background: #ffffff;
   }
 
   .hero {
@@ -834,12 +898,32 @@ pre {
   }
 
   .sim-row {
-    grid-template-columns: minmax(0, 1.5fr) minmax(190px, 1fr);
+    grid-template-columns: 1fr;
     gap: 0.5rem;
   }
 
   .setup-section {
-    max-width: 270px;
+    max-width: none;
+    width: 100%;
+    justify-self: stretch;
+    order: -1;
+  }
+
+  .matrix-column {
+    order: 0;
+  }
+
+  .matrix {
+    gap: 0.3rem;
+    width: max-content;
+    min-width: 100%;
+  }
+
+  .cell {
+    min-width: 34px;
+    min-height: 34px;
+    border-radius: 7px;
+    padding: 0.12rem;
   }
 
   .results-grid {
@@ -889,5 +973,22 @@ pre {
 
   .controls-grid {
     grid-template-columns: 1fr;
+  }
+
+  .matrix {
+    gap: 0.28rem;
+  }
+
+  .cell {
+    min-width: 32px;
+    min-height: 32px;
+  }
+
+  .cell .box {
+    font-size: 0.48rem;
+  }
+
+  .cell .value {
+    font-size: 0.68rem;
   }
 }
